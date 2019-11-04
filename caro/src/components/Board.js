@@ -221,8 +221,9 @@ class Board extends React.Component {
       countLeftCorn++;
       leftCorn[0]++;
     }
-    if (countLeftCorn >= 5) return true;
-
+    if (countLeftCorn >= 5) {
+      return true;
+    }
     return false;
   }
 }
