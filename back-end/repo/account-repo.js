@@ -5,6 +5,8 @@ const sqlGetAccountByUsernameAndPassword = `select * from account where username
 const sqlGetAccountByUsername = `select * from account where username=? `;
 const sqlAddAccount = `insert into account(username,password,fullname,email,age,gender) 
 values (?,?,?,?,?,?)`;
+const sqlUpdateAccount = `update account set fullname=?,email=?,age=?,gender=?`;
+const sqlUpdateImage = `update account set image=? where username=?`;
 
 exports.getAccountByUsernameAndPassword = (username, password) => {
   return dbReader(sqlGetAccountByUsernameAndPassword, [
@@ -25,6 +27,19 @@ exports.addAccount = user => {
     user.age,
     user.gender
   ]);
+};
+
+exports.updateAccount = userUpdate => {
+  return dbReader(sqlUpdateAccount, [
+    userUpdate.fullname,
+    userUpdate.email,
+    userUpdate.age,
+    userUpdate.gender
+  ]);
+};
+
+exports.updateImage = (image, username) => {
+  return dbReader(sqlUpdateImage, [image, username]);
 };
 
 // {

@@ -4,6 +4,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const passportJWT = require("passport-jwt");
 const JWTStrategy   = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
+const msgFactory=require('./response-message/index')
 passport.use(new LocalStrategy({
         usernameField: 'username',
         passwordField: 'password'
@@ -12,18 +13,21 @@ passport.use(new LocalStrategy({
         //this one is typically a DB call. Assume that the returned user object is pre-formatted and ready for storing in JWT
         return accountRepo.getAccountByUsernameAndPassword(username,password)
            .then(users => {
+  
                if (users.length===0) {
-                   return cb(null, false, {message: 'Incorrect username or password.'});
+                   return cb(null, false, {message: 'USERNAME_OR_PASSWORD_WRONG'});
                }
                return cb(null, users[0], {message: 'Logged In Successfully'});
           })
-          .catch(err => cb(err));
+          .catch(err =>{
+            cb(err)
+          });
     }
 ));
 
 
 passport.use(new JWTStrategy({
-    jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+    jwtFromRequest: ExtractJWT.fromUrlQueryParameter('token'),
     secretOrKey   : 'your_jwt_secret'
 },
 function (jwtPayload, cb) {

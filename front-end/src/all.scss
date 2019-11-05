@@ -1,0 +1,20 @@
+@mixin child-center-horizontal {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+@mixin child-center-horizontal-and-scale($x: 1, $y: 1) {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0) scale($x, $y);
+}
+
+@mixin border-shadow-1 {
+  -webkit-box-shadow: 0px 0px 11px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 0px 11px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 11px 0px rgba(0, 0, 0, 0.75);
+}
+@mixin opacity-black-background($rate: 0.4) {
+  background-color: rgba(0, 0, 0, $rate);
+}

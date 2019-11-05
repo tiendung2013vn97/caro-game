@@ -5,12 +5,14 @@ const bodyParser = require("body-parser");
 const routes = require("./routes");
 const passport = require("passport");
 
+const app = express();
+
 require("./passport");
 
-const app = express();
+
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.json());
-app.use(cors({ credentials: true }));
+app.use(cors());
 
 app.use("/user", routes.user);
 

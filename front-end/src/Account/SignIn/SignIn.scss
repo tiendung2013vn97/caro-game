@@ -1,0 +1,78 @@
+@import "../../all.scss";
+
+.login-page_main {
+  position: absolute;
+  @include child-center-horizontal;
+  width: 400px;
+  color: black;
+
+  span {
+    font-size: 1.5rem;
+    display: block;
+    margin-bottom: 3px;
+  }
+}
+.login-page {
+  position: relative;
+  height: 300px;
+  font-family: "Open Sans";
+
+  img {
+    width: 100%;
+    height: 1000px;
+    top: 0px;
+    left: 0px;
+    z-index: -1;
+    filter: blur(0px) sepia(80%);
+    opacity: 0.5;
+  }
+  .btn-login:active {
+    cursor: progress;
+  }
+
+  .form-login {
+    padding-left: 50px;
+    padding-right: 50px;
+    .row-input {
+      margin-bottom: 20px;
+      margin-top: 20px;
+      width: 100%;
+    }
+
+    input {
+      box-sizing: border-box;
+      font-size: 1.5rem !important;
+      font-weight: 100;
+      padding-left: 20px;
+      height: 30px;
+      width: 100%;
+      border-radius: 2px;
+      border: 0px;
+      border: 1px solid #23a8f2;
+      font-family: "Open Sans";
+    }
+    input::placeholder {
+      font-size: 1.5rem !important;
+    }
+  }
+  .btn-login {
+    @include child-center-horizontal;
+    height: 40px;
+    line-height: 38px;
+    text-align: center;
+    color: white;
+    border-radius: 2px;
+    background-color: rgba(0, 0, 0, 0.8);
+
+    width: 100px !important;
+
+    font-size: 1.5rem !important;
+    &:hover {
+      background-color: black;
+      cursor: pointer;
+    }
+    &:active {
+      color: rgb(128, 174, 248);
+    }
+  }
+}

@@ -1,0 +1,21 @@
+.square{
+	position: absolute;
+	width: 25px;
+	height: 25px;
+	border: 1px solid black;
+	
+	-webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; 
+}
+.square:hover{
+	background-color: #F1F1F1;
+	cursor: pointer;
+}
+.square:active{
+	background-color: #777777;
+	cursor: pointer;
+}
