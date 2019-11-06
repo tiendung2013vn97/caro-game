@@ -11,6 +11,7 @@ import config from '../config';
 import { updateAccountInfo } from '../Account/action-account';
 import { logout } from '../Account/action-account';
 import {changeMode,updateStatusReady,updateInGameStatus} from './action-home'
+import socketIOClient from 'socket.io-client'
 
 
 class HomeContainer extends Component {
@@ -24,6 +25,8 @@ class HomeContainer extends Component {
       let userStr = localStorage.getItem('user');
       let user = JSON.parse(userStr);
       this.props.updateAccountInfo(user);
+      const socket=socketIOClient()
+      
     }
   }
   //render
@@ -34,11 +37,17 @@ class HomeContainer extends Component {
         logout={this.props.logout}
         enemyAccount={this.props.enemyAccount}
       changeMode={this.props.changeMode}
-      updateStatusReady={this.props.updateStatusReady}
+      updateStatusReady={this.updateStatusReady.bind(this)}
       updateInGameStatus={this.props.updateInGameStatus}
       game={this.props.game}
       />
     );
+  }
+  updateStatusReady(readyStatus){
+    if(this.props.game.curMode==='player'&& this.props.account.fullname&&readyStatus===true){
+      alert('conect');
+      //socket.emit()
+    }
   }
 }
 

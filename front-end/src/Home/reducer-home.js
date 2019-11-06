@@ -2,7 +2,8 @@ const init = {
    curMode:'computer',
    readyStatus:false,
    hasOtherPlayer:false,
-   inGame:false
+   inGame:false,
+   url:'localhost:3000'
 };
 
 const gameReducer = (state = init, action) => {
