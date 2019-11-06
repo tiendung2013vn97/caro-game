@@ -1,7 +1,7 @@
 .square{
 	position: absolute;
-	width: 25px;
-	height: 25px;
+	width: 35px;
+	height: 35px;
 	border: 1px solid black;
 	
 	-webkit-touch-callout: none; /* iOS Safari */
@@ -12,10 +12,17 @@
             user-select: none; 
 }
 .square:hover{
-	background-color: #F1F1F1;
+	background-color: rgba(240, 240, 13,0.5);
 	cursor: pointer;
 }
 .square:active{
 	background-color: #777777;
 	cursor: pointer;
+}
+.hit-icon{
+	position: absolute;
+	top:1px;
+	left: 1px;
+	width: 30px;
+	height: 30px;
 }

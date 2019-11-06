@@ -27,7 +27,7 @@ class SignInContainer extends Component {
     api
       .post('user/login', userInformation)
       .then(res => {
-        if(res.data.message==='USERNAME_OR_PASSWORD_WRONG'){
+        if (res.data.message === 'USERNAME_OR_PASSWORD_WRONG') {
           return this.props.showFailNotify(
             'Username hoặc password sai. Vui lòng nhập lại!'
           );
@@ -53,12 +53,13 @@ class SignInContainer extends Component {
           }
           return;
         }
-      
+
         let user = res.data.user;
-        this.props.storeAccountInfo(user);
+
         localStorage.setItem('user', JSON.stringify(user));
         localStorage.setItem('token', res.data.token);
-        
+        this.props.storeAccountInfo(user);
+
       })
       .catch(err => {
         this.props.showAlertNotify('' + err);

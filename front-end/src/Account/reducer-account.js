@@ -10,7 +10,6 @@ const init = {
 const accountReducer = (state = init, action) => {
   switch (action.type) {
     case 'UPDATE_ACCOUNT_INFO': {
-      console.log('action',action)
       return {
         ...state,
         ...action.accountInfo

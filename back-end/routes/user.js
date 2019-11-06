@@ -76,6 +76,19 @@ router.get("/img", (req, res, next) => {
   });
 });
 
+router.get("/imgEnemy", (req, res, next) => {
+  passport.authenticate("jwt", { session: false })(req, res, () => {
+    accountRepo
+      .getAccountByUsername(req.query.username)
+      .then(users => {
+        res.sendFile(global.BASE_DIR +'/static/user/'+ users[0].image);
+      })
+      .catch(err => {
+        res.json(msgFactory.createMsgFail("" + err));
+      });
+  });
+});
+
 let limits = { fileSize: 10000000 };
 
 const storage = multer.diskStorage({

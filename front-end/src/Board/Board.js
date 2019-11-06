@@ -1,16 +1,19 @@
 import React from 'react';
 import Square from '../Square/Square';
 import './Board.scss';
+import { Row, Col, Button, Card } from 'antd'
+import EnemyAvatar from '../Account/AvatarEnemy/container-avatar'
+
 
 class Board extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       avail_val: 1,
-      number_width_square: 7,
-      number_height_square: 7,
-      top: 100,
-      left: 100,
+      number_width_square: 20,
+      number_height_square: 20,
+      top: 0,
+      left: 0,
       logic_board: [],
       listHit: [],
       listPosWin: [],
@@ -81,17 +84,49 @@ class Board extends React.Component {
     }
 
     return (
-      <div id="board">
-        <div className="title">GAME CARO 20x20</div>
-        <div id="btn_replay">Chơi lại</div>
+      <Row id="board" >
+        {/* <div id="btn_replay">Chơi lại</div>
         <div id="turn">
           {'Quân cờ được đánh lượt này: '}
           {this.state.avail_val === 1 ? 'O' : null}
           {this.state.avail_val === 2 ? 'X' : null}
-        </div>
-        <div id="board_main_play">{board_main_play}</div>
-        <div id="list_hit_history">{listHitHtml}</div>
-      </div>
+        </div> */}
+        <Col span={8}>
+          <Row>
+            <EnemyAvatar />
+          </Row>
+          <Row className='list-history'>
+            <Card title="Lịch sử đánh" style={{ width: '100%', borderRadius: "10px", border: "1px solid black"
+          ,minHeight:460 }}>
+              <p>Card content</p>
+              <p>Card content</p>
+              <p>Card content</p>
+            </Card>
+          </Row>
+        </Col>
+
+        <Col span={16}>
+          <Row className='top-btn'>
+
+            <Button className='btn-gg' type="primary">
+              Xin đầu hàng
+          </Button>
+            <Button className='btn-tie' type="primary">
+              Xin hòa
+          </Button>
+
+            <Button className='btn-undo' type="primary">
+              Undo
+          </Button>
+            <Button className='btn-redo' type="primary">
+              Redo
+          </Button>
+          </Row>
+          <Row id="board_main_play">{board_main_play}</Row>
+        </Col>
+
+        {/* <div id="list_hit_history">{listHitHtml}</div> */}
+      </Row>
     );
   }
 

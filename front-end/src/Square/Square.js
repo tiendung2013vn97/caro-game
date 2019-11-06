@@ -1,5 +1,7 @@
 import React from 'react';
 import './Square.scss';
+import XIcon from '../assets/imgs/x.png'
+import OIcon from '../assets/imgs/o.png'
 
 class Square extends React.Component {
   constructor(props) {
@@ -7,7 +9,7 @@ class Square extends React.Component {
     this.state = {
       x: 0,
       y: 0,
-      SQUARE_SIZE: 25
+      SQUARE_SIZE: 35
     };
   }
   componentDidMount() {
@@ -27,8 +29,11 @@ class Square extends React.Component {
         }}
         onClick={this.props.hitSquare}
       >
-        {this.props.val === 1 ? 'O' : null}
-        {this.props.val === 2 ? 'X' : null}
+        {this.props.val === 1 &&
+        <img className='hit-icon' src={OIcon}/>
+        }
+        {this.props.val === 2 &&
+        <img className='hit-icon' src={XIcon}/>}
       </div>
     );
   }

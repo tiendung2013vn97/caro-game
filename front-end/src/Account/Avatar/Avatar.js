@@ -54,7 +54,7 @@ class Avatar extends Component {
             <Row>Giới tính: {account.gender}</Row>
             <Row>Tuổi: {account.age}</Row>
             <Row>
-              <Button onClick={this.edit.bind(this)}>Edit</Button>
+              <Button type="primary"  onClick={this.edit.bind(this)}>Edit</Button>
             </Row>
           </div>
         )}
@@ -110,8 +110,8 @@ class Avatar extends Component {
             </Row>
 
             <Row>
-              <Button onClick={this.save.bind(this)}>Save</Button>
-              <Button onClick={this.cancle.bind(this)}>Cancle</Button>
+              <Button type="primary" onClick={this.save.bind(this)}>Save</Button>
+              <Button type="primary"  onClick={this.cancle.bind(this)} style={{marginLeft:20}}>Cancle</Button>
             </Row>
           </div>
         )}

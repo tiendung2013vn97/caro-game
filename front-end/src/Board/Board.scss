@@ -37,13 +37,34 @@ text-align: left;
 }
 #board_main_play{
 	display: block;
+	position: relative;
 	width: 700px;
-	height:600px;
-	float:left;
-
+	height:max-content;
+	float: right;
 }
 #board{
 	position: relative;
-	left: 50%;
-	transform: translate(-50%,0);
+	margin-right: 100px;
+	.top-btn{
+		margin-bottom: 20px;
+		.btn-gg{
+			float: right;
+		}
+		.btn-tie{
+			float: right;
+			margin-right: 20px;
+		}
+		.btn-undo{
+			float: right;
+			margin-right: 20px;
+		}
+		.btn-redo{
+			float: right;
+			margin-right: 20px;
+		}
+	}
+	.list-history{
+		margin-top:50px;
+	}
+	
 }
