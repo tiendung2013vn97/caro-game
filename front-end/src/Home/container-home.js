@@ -27,7 +27,7 @@ class HomeContainer extends Component {
   }
   //render
   render() {
-    return <Home account={this.props.account} logout={this.props.logout}/>;
+    return <Home account={this.props.account} logout={this.props.logout} enemyAccount={this.props.enemyAccount}/>;
   }
 
 }
@@ -35,7 +35,8 @@ class HomeContainer extends Component {
 //map state to props
 function mapStateToProps(state) {
   return {
-    account:state.account
+    account:state.account,
+    enemyAccount:state.enemyAccount
   };
 }
 
