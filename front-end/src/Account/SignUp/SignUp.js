@@ -20,15 +20,15 @@ class SignUp extends Component {
               <Col span={11}>
                 <div className="row-input">
                   <span> Họ và tên: </span>
-                  <input type="text" id="fullname_val" />
+                  <input  id="fullname_val" />
                 </div>
                 <div className="row-input">
                   <span> Username:</span>
-                  <input type="text" id="username_val" />
+                  <input id="username2_val" />
                 </div>
                 <div className="row-input">
                   <span> Password: </span>
-                  <input type="password" id="password_val" />
+                  <input type="password" id="password2_val" />
                 </div>
               </Col>
               <Col span={11} style={{ marginLeft: 20 }}>
@@ -46,7 +46,7 @@ class SignUp extends Component {
                 </div>
                 <div className="row-input">
                   <span> Giới tính: </span>
-                  <input type="gender" id="gender_val" placeholder="Nam" />
+                  <input  id="gender_val" placeholder="Nam" />
                 </div>
               </Col>
             </Row>
@@ -64,21 +64,22 @@ class SignUp extends Component {
     handle user click button sign up
   */
   handleSignUp() {
-    let username = document.getElementById('username_val').value;
-    let password = document.getElementById('password_val').value;
+    let username = document.getElementById('username2_val').value;
+    let password = document.getElementById('password2_val').value;
     let email = document.getElementById('email_val').value;
     let fullname = document.getElementById('fullname_val').value;
     let age = document.getElementById('age_val').value;
     let gender = document.getElementById('gender_val').value;
 
     let userInformation = {
-      username: username,
-      password: password,
-      email: email,
-      fullname: fullname,
+      username,
+      password,
+      email,
+      fullname,
       age,
       gender
     };
+    console.log('user',userInformation)
     this.props.signUp(userInformation);
     //let btnSignUp=document.getElementsByClassName('btn-signup')[0];
   }

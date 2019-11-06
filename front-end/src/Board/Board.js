@@ -1,9 +1,8 @@
 import React from 'react';
 import Square from '../Square/Square';
 import './Board.scss';
-import { Row, Col, Button, Card } from 'antd'
-import EnemyAvatar from '../Account/AvatarEnemy/container-avatar'
-
+import { Row, Col, Button, Card } from 'antd';
+import EnemyAvatar from '../Account/AvatarEnemy/container-avatar';
 
 class Board extends React.Component {
   constructor(props) {
@@ -16,17 +15,25 @@ class Board extends React.Component {
       left: 0,
       logic_board: [],
       listHit: [],
-      listPosWin: [],
       typeWinner: 0,
-      flag: true
+      flag: true,
+      emSquare: [-1, -1],
+      isWin: false
     };
     this.checkWin = this.checkWin.bind(this);
-    this.setWinResult = this.setWinResult.bind(this);
 
     //this.reset = this.reset.bind(this);
     this.hitSquare = this.hitSquare.bind(this);
   }
   componentDidMount() {
+    let ctx = this;
+    document.onkeydown = function(evt) {
+      evt = evt || window.event;
+      if (evt.keyCode == 27) {
+        ctx.setState({ ...ctx.state, emSquare: [-1, -1] });
+      }
+    };
+
     let logic_board = [];
     let numWidth = this.state.number_width_square;
     let numHeight = this.state.number_height_square;
@@ -61,6 +68,9 @@ class Board extends React.Component {
             hitSquare={() => {
               this.hitSquare(i, j);
             }}
+            isWin={this.state.isWin}
+            listWin={this.state.listWin}
+            emSquare={this.state.emSquare}
             val={
               this.state.logic_board[i + 1]
                 ? this.state.logic_board[i + 1][j + 1]
@@ -76,7 +86,13 @@ class Board extends React.Component {
     let listHitHtml = [];
     for (let i = 0; i < listHit.length; i++) {
       listHitHtml.push(
-        <div id={'turn' + i} className= {i%2===0?'history-item':'history-item em'}>
+        <div
+          id={'turn' + i}
+          className={i % 2 === 0 ? 'history-item' : 'history-item em'}
+          onClick={() =>
+            this.emSquare(listHit[i].split(',')[0], listHit[i].split(',')[1])
+          }
+        >
           Lượt {i + 1}: {listHit[i].split(',')[2]} đánh tại ô (
           {listHit[i].split(',')[0]},{listHit[i].split(',')[1]})
         </div>
@@ -84,7 +100,7 @@ class Board extends React.Component {
     }
 
     return (
-      <Row id="board" >
+      <Row id="board">
         {/* <div id="btn_replay">Chơi lại</div>
         <div id="turn">
           {'Quân cờ được đánh lượt này: '}
@@ -95,33 +111,36 @@ class Board extends React.Component {
           <Row>
             <EnemyAvatar />
           </Row>
-          <Row className='list-history'>
-            <Card title="Lịch sử đánh" style={{ width: '100%', borderRadius: "10px", border: "1px solid black"
-          ,height:460 }}>
-            <div className='history-container'>
-            {listHitHtml}
-            </div>
-             
+          <Row className="list-history">
+            <Card
+              title="Lịch sử đánh"
+              style={{
+                width: '100%',
+                borderRadius: '10px',
+                border: '1px solid black',
+                height: 460
+              }}
+            >
+              <div className="history-container">{listHitHtml}</div>
             </Card>
           </Row>
         </Col>
 
         <Col span={16}>
-          <Row className='top-btn'>
-
-            <Button className='btn-gg' type="primary">
+          <Row className="top-btn">
+            <Button className="btn-gg" type="primary">
               Xin đầu hàng
-          </Button>
-            <Button className='btn-tie' type="primary">
+            </Button>
+            <Button className="btn-tie" type="primary">
               Xin hòa
-          </Button>
+            </Button>
 
-            <Button className='btn-undo' type="primary">
+            <Button className="btn-undo" type="primary">
               Undo
-          </Button>
-            <Button className='btn-redo' type="primary">
+            </Button>
+            <Button className="btn-redo" type="primary">
               Redo
-          </Button>
+            </Button>
           </Row>
           <Row id="board_main_play">{board_main_play}</Row>
         </Col>
@@ -130,7 +149,12 @@ class Board extends React.Component {
       </Row>
     );
   }
-
+  emSquare(i, j) {
+    this.setState({
+      ...this.state,
+      emSquare: [i, j]
+    });
+  }
   hitSquare(i, j) {
     if (
       this.state.logic_board[i + 1][j + 1] === 0 &&
@@ -138,11 +162,6 @@ class Board extends React.Component {
     ) {
       let logic_board = [...this.state.logic_board];
       logic_board[i + 1][j + 1] = this.state.avail_val;
-
-      console.log(logic_board);
-      if (this.checkWin(i, j, logic_board)) {
-        alert('win');
-      }
 
       let listHit = this.state.listHit;
       listHit.push(`${i},${j},${this.state.avail_val}`);
@@ -152,20 +171,29 @@ class Board extends React.Component {
         avail_val: this.state.avail_val === 1 ? 2 : 1,
         listHit: listHit
       });
-    }
-  }
 
-  setWinResult(pos1, pos2, pos3, pos4, pos5, typeWinner) {
-    let listPosWin = this.state.listPosWin;
-    listPosWin = [pos1, pos2, pos3, pos4, pos5];
-    this.state.listPosWin = listPosWin;
-    this.state.typeWinner = typeWinner;
-    this.setState = {
-      ...this.state,
-      listPosWin: listPosWin,
-      typeWinner: typeWinner,
-      flag: !this.state.flag
-    };
+      let result = this.checkWin(i, j, logic_board, 1);
+      if (result != false) {
+        this.setState({
+          ...this.state,
+          listWin: result,
+          isWin: true,
+          typeWinner: 1
+        });
+        return;
+      }
+
+      result = this.checkWin(i, j, logic_board, 2);
+      if (result != false) {
+        this.setState({
+          ...this.state,
+          listWin: result,
+          isWin: true,
+          typeWinner: 2
+        });
+        return;
+      }
+    }
   }
 
   checkWin(i, j, logicBoard, typeHitter = 1) {
@@ -184,12 +212,15 @@ class Board extends React.Component {
       countTopRightCorn = 0,
       countLeftCorn = 0;
 
+    let listWin = [];
+
     //_______________________________________________________________
     while (logicBoard[topLeftCorn[0]][topLeftCorn[1]] === typeHitter) {
       topLeftCorn[0]--;
       topLeftCorn[1]--;
     }
     while (logicBoard[topLeftCorn[0] + 1][topLeftCorn[1] + 1] === typeHitter) {
+      listWin.push([topLeftCorn[0] + 1, topLeftCorn[1] + 1]);
       countTopLeftCorn++;
       topLeftCorn[0]++;
       topLeftCorn[1]++;
@@ -202,17 +233,18 @@ class Board extends React.Component {
       (logicBoard[topLeftCorn[0] + 2][topLeftCorn[1] + 2] !== typeEnemy ||
         logicBoard[topLeftCorn[0] - 4][topLeftCorn[1] - 4] !== typeEnemy)
     ) {
-      return true;
+      return listWin;
     }
 
     //_______________________________________________________________
-
+    listWin = [];
     while (logicBoard[topCenterCorn[0] + 1][topCenterCorn[1]] === typeHitter) {
       topCenterCorn[1]--;
     }
     while (
       logicBoard[topCenterCorn[0] + 1][topCenterCorn[1] + 1] === typeHitter
     ) {
+      listWin.push([topCenterCorn[0] + 1, topCenterCorn[1] + 1]);
       countTopCenterCorn++;
       topCenterCorn[1]++;
     }
@@ -223,10 +255,11 @@ class Board extends React.Component {
       (logicBoard[topCenterCorn[0] + 1][topCenterCorn[1] + 2] !== typeEnemy ||
         logicBoard[topCenterCorn[0] + 1][topCenterCorn[1] - 4] !== typeEnemy)
     ) {
-      return true;
+      return listWin;
     }
 
     //_______________________________________________________________
+    listWin = [];
     while (logicBoard[topRightCorn[0] + 2][topRightCorn[1]] === typeHitter) {
       topRightCorn[0]++;
       topRightCorn[1]--;
@@ -234,6 +267,7 @@ class Board extends React.Component {
     while (
       logicBoard[topRightCorn[0] + 1][topRightCorn[1] + 1] === typeHitter
     ) {
+      listWin.push([topRightCorn[0] + 1, topRightCorn[1] + 1]);
       countTopRightCorn++;
       topRightCorn[0]--;
       topRightCorn[1]++;
@@ -246,19 +280,21 @@ class Board extends React.Component {
       (logicBoard[topRightCorn[0]][topRightCorn[1] + 2] ||
         logicBoard[topRightCorn[0] + 6][topRightCorn[1] - 4])
     ) {
-      return true;
+      return listWin;
     }
 
     //_______________________________________________________________
+    listWin = [];
     while (logicBoard[leftCorn[0]][leftCorn[1] + 1] === typeHitter) {
       leftCorn[0]--;
     }
     while (logicBoard[leftCorn[0] + 1][leftCorn[1] + 1] === typeHitter) {
+      listWin.push([leftCorn[0] + 1, leftCorn[1] + 1]);
       countLeftCorn++;
       leftCorn[0]++;
     }
     if (countLeftCorn >= 5) {
-      return true;
+      return listWin;
     }
     return false;
   }

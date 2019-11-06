@@ -3,8 +3,8 @@ const SHA256 = require("crypto-js/sha256");
 
 const sqlGetAccountByUsernameAndPassword = `select * from account where username=? and password=?`;
 const sqlGetAccountByUsername = `select * from account where username=? `;
-const sqlAddAccount = `insert into account(username,password,fullname,email,age,gender) 
-values (?,?,?,?,?,?)`;
+const sqlAddAccount = `insert into account(username,password,fullname,email,age,gender,image) 
+values (?,?,?,?,?,?,?)`;
 const sqlUpdateAccount = `update account set fullname=?,email=?,age=?,gender=?`;
 const sqlUpdateImage = `update account set image=? where username=?`;
 
@@ -19,13 +19,20 @@ exports.getAccountByUsername = username => {
 };
 
 exports.addAccount = user => {
+  let image=null;
+  if(user.image!==undefined){
+    image=user.image
+  }else{
+    image="default.jpg"
+  }
   return dbReader(sqlAddAccount, [
     user.username,
     SHA256(user.password).toString(),
     user.fullname,
     user.email,
     user.age,
-    user.gender
+    user.gender,
+    image
   ]);
 };
 

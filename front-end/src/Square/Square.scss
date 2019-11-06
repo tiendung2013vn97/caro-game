@@ -9,7 +9,14 @@
      -khtml-user-select: none; /* Konqueror HTML */
        -moz-user-select: none; /* Firefox */
         -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; 
+			user-select: none; 
+			
+}
+.em-square{
+	background-color: green!important;
+}
+.win-square{
+	background-color: yellow;
 }
 .square:hover{
 	background-color: rgba(240, 240, 13,0.5);

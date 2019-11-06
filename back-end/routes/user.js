@@ -8,6 +8,7 @@ const multer = require("multer");
 
 router.post("/register", function(req, res, next) {
   let user = req.body;
+  
   if (
     !user.username ||
     !user.password ||
