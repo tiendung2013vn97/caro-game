@@ -76,7 +76,7 @@ class Board extends React.Component {
     let listHitHtml = [];
     for (let i = 0; i < listHit.length; i++) {
       listHitHtml.push(
-        <div id={'turn' + i}>
+        <div id={'turn' + i} className= {i%2===0?'history-item':'history-item em'}>
           Lượt {i + 1}: {listHit[i].split(',')[2]} đánh tại ô (
           {listHit[i].split(',')[0]},{listHit[i].split(',')[1]})
         </div>
@@ -97,10 +97,11 @@ class Board extends React.Component {
           </Row>
           <Row className='list-history'>
             <Card title="Lịch sử đánh" style={{ width: '100%', borderRadius: "10px", border: "1px solid black"
-          ,minHeight:460 }}>
-              <p>Card content</p>
-              <p>Card content</p>
-              <p>Card content</p>
+          ,height:460 }}>
+            <div className='history-container'>
+            {listHitHtml}
+            </div>
+             
             </Card>
           </Row>
         </Col>
