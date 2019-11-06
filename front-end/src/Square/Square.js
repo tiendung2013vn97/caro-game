@@ -29,7 +29,6 @@ class Square extends React.Component {
       classStr+='em-square '
     }
     if(this.props.isWin ){
-      console.log(this.props.listWin)
       this.props.listWin.forEach(val=>{
         if(val[0]==+this.props.x+1&&val[1]==+this.props.y+1){
           classStr+='win-square'

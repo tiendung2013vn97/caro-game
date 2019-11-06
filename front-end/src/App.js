@@ -1,7 +1,6 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import Board from './Board/Board';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import SignIn from './Account/SignIn/container-signIn';
 import SignUp from './Account/SignUp/container-signUp';

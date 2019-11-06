@@ -6,7 +6,7 @@ import SignIn from '../Account/SignIn/container-signIn';
 import SignUp from '../Account/SignUp/container-signUp';
 import HomeBg from '../assets/imgs/homeBg.jpg';
 import Avatar from '../Account/Avatar/container-avatar';
-import Board from '../Board/Board';
+import Board from '../Board/container-board';
 import config from '../config';
 
 const { TabPane } = Tabs;
@@ -27,6 +27,14 @@ class Home extends Component {
     let user = this.props.account;
     if (user.fullname) {
       isLoggin = true;
+    }
+
+    let disableBtnControlMode =
+      this.props.game.readyStatus === true ? true : false;
+
+    let disableBtnSendMsg=true;
+    if(this.props.game.inGame&&this.props.game.curMode==='player'){
+      disableBtnSendMsg=false;
     }
 
     let pageNotLoggin = [];
@@ -68,6 +76,56 @@ class Home extends Component {
             <Row>
               <Avatar />
             </Row>
+            <Row className="row-btn-control">
+              {!this.props.game.inGame && (
+                <Button
+                  type="primary"
+                  className="btn-item"
+                  onClick={() => this.props.changeMode('player')}
+                  disabled={disableBtnControlMode}
+                >
+                  Chơi với người
+                </Button>
+              )}
+              {!this.props.game.inGame && (
+                <Button
+                  type="primary"
+                  className="btn-item"
+                  onClick={() => this.props.changeMode('computer')}
+                  disabled={disableBtnControlMode}
+                >
+                  Chơi với máy
+                </Button>
+              )}
+
+              {!disableBtnControlMode && !this.props.game.inGame && (
+                <Button
+                  type="primary"
+                  className="btn-item"
+                  onClick={() => this.props.updateStatusReady(true)}
+                >
+                  Sẵn sàng
+                </Button>
+              )}
+              {disableBtnControlMode && !this.props.game.inGame && (
+                <Button
+                  type="primary"
+                  className="btn-item"
+                  onClick={() => this.props.updateStatusReady(false)}
+                >
+                  Hủy sẵn sàng
+                </Button>
+              )}
+              {this.props.game.inGame && (
+                <Button
+                  type="primary"
+                  className="btn-item"
+                  onClick={() => this.props.updateInGameStatus(false)}
+                >
+                  Thoát game
+                </Button>
+              )}
+            </Row>
             <Card
               className="chatbox"
               title="Chat box"
@@ -79,7 +137,7 @@ class Home extends Component {
               }}
             >
               <Row className="msg-log">
-                <div className='line-container'>
+                <div className="line-container">
                   <Row className="pull-left">
                     <Col span={8}>
                       <img
@@ -99,7 +157,7 @@ class Home extends Component {
                   </Row>
                 </div>
 
-                <div className='line-container'>
+                <div className="line-container">
                   <Row className="pull-right">
                     <Col span={16} style={{ textAlign: 'right' }}>
                       sdasdasd
@@ -118,11 +176,10 @@ class Home extends Component {
                     </Col>
                   </Row>
                 </div>
-
               </Row>
               <Row className="input-field">
                 <Input className="input" type="text" />
-                <Button type="primary" className="btn-send">
+                <Button type="primary" className="btn-send" disabled={disableBtnSendMsg}>
                   Gửi
                 </Button>
               </Row>

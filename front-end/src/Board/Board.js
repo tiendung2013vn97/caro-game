@@ -1,6 +1,7 @@
 import React from 'react';
 import Square from '../Square/Square';
 import './Board.scss';
+
 import { Row, Col, Button, Card } from 'antd';
 import EnemyAvatar from '../Account/AvatarEnemy/container-avatar';
 
@@ -80,7 +81,6 @@ class Board extends React.Component {
         );
       }
     }
-
     let listHit = this.state.listHit;
 
     let listHitHtml = [];
@@ -108,9 +108,7 @@ class Board extends React.Component {
           {this.state.avail_val === 2 ? 'X' : null}
         </div> */}
         <Col span={8}>
-          <Row>
-            <EnemyAvatar />
-          </Row>
+          <Row>{this.props.game.curMode === 'player' && <EnemyAvatar />}</Row>
           <Row className="list-history">
             <Card
               title="Lịch sử đánh"
@@ -131,16 +129,20 @@ class Board extends React.Component {
             <Button className="btn-gg" type="primary">
               Xin đầu hàng
             </Button>
-            <Button className="btn-tie" type="primary">
-              Xin hòa
-            </Button>
+            {this.props.game.curMode === 'player' && (
+              <Button className="btn-tie" type="primary">
+                Xin hòa
+              </Button>
+            )}
 
             <Button className="btn-undo" type="primary">
               Undo
             </Button>
-            <Button className="btn-redo" type="primary">
-              Redo
-            </Button>
+            {this.props.game.curMode === 'computer' && (
+              <Button className="btn-redo" type="primary">
+                Redo
+              </Button>
+            )}
           </Row>
           <Row id="board_main_play">{board_main_play}</Row>
         </Col>

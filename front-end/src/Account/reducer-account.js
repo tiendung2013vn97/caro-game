@@ -17,14 +17,7 @@ const accountReducer = (state = init, action) => {
     }
     case 'LOG_OUT': {
       localStorage.clear();
-      return {
-        ...state,
-        fullname: '',
-        gender: '',
-        email: '',
-        username: '',
-        age: ''
-      };
+      return init
     }
     case 'AVATAR_CHANGE': {
       return {

@@ -9,7 +9,8 @@ import {
 import Home from './Home';
 import config from '../config';
 import { updateAccountInfo } from '../Account/action-account';
-import {logout} from '../Account/action-account'
+import { logout } from '../Account/action-account';
+import {changeMode,updateStatusReady,updateInGameStatus} from './action-home'
 
 
 class HomeContainer extends Component {
@@ -18,25 +19,35 @@ class HomeContainer extends Component {
     super(props);
   }
 
-   componentDidMount(){
-    if(localStorage.getItem('user')){
-      let userStr= localStorage.getItem('user')
-      let user= JSON.parse(userStr) ;
-      this.props.updateAccountInfo(user)
+  componentDidMount() {
+    if (localStorage.getItem('user')) {
+      let userStr = localStorage.getItem('user');
+      let user = JSON.parse(userStr);
+      this.props.updateAccountInfo(user);
     }
   }
   //render
   render() {
-    return <Home account={this.props.account} logout={this.props.logout} enemyAccount={this.props.enemyAccount}/>;
+    return (
+      <Home
+        account={this.props.account}
+        logout={this.props.logout}
+        enemyAccount={this.props.enemyAccount}
+      changeMode={this.props.changeMode}
+      updateStatusReady={this.props.updateStatusReady}
+      updateInGameStatus={this.props.updateInGameStatus}
+      game={this.props.game}
+      />
+    );
   }
-
 }
 
 //map state to props
 function mapStateToProps(state) {
   return {
-    account:state.account,
-    enemyAccount:state.enemyAccount
+    account: state.account,
+    enemyAccount: state.enemyAccount,
+    game:state.game
   };
 }
 
@@ -58,14 +69,23 @@ function mapDispatchToProps(dispatch) {
       return dispatch(showSuccessNotify(msg));
     },
 
-    updateAccountInfo(user){
-      return dispatch(updateAccountInfo(user))
+    updateAccountInfo(user) {
+      return dispatch(updateAccountInfo(user));
     },
-    logout(){
-      localStorage.clear()
-      return dispatch(logout())
+    logout() {
+      localStorage.clear();
+      return dispatch(logout());
+    },
+    changeMode(mode){
+      return dispatch(changeMode(mode))
+    },
+    updateStatusReady(readyStatus){
+      return dispatch(updateStatusReady(readyStatus))
+    },
+    updateInGameStatus(status){
+      return dispatch(updateInGameStatus(status))
     }
-
+    
   };
 }
 export default connect(
