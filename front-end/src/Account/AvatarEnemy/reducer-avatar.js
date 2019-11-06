@@ -1,9 +1,9 @@
 const init = {
-  fullname: 'a',
-  email: 'a@gmail',
-  username: 'as',
-  gender: 'ds',
-  age: 34,
+  fullname: '',
+  email: '',
+  username: '',
+  gender: '',
+  age: null,
   flagChange: false
 };
 

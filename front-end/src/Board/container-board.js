@@ -6,6 +6,7 @@ import {
   showSuccessNotify,
   showFailNotify
 } from '../Notify/action-notify';
+import {changeTurn} from '../Home/action-home'
 
 import config from '../config';
 import Board from './Board'
@@ -18,15 +19,28 @@ class BoardContainer extends Component {
 
   //render
   render() {
-    return <Board  game={this.props.game}/>;
+    return <Board  game={this.props.game} hitSquare={this.hitSquare.bind(this)} enemyAccount={this.props.enemyAccount}
+    account={this.props.account} changeTurn={this.props.changeTurn}
+    showSuccessNotify={this.props.showSuccessNotify}
+    showFailNotify={this.props.showFailNotify}
+  />;
   }
-  
+  hitSquare(i,j){
+      if(this.props.game.myTurn){
+        this.props.game.socket.emit('hit',`${i},${j}`)
+        this.props.changeTurn()
+      }
+    
+   
+}
 }
 
 //map state to props
 function mapStateToProps(state) {
   return {
-    game:state.game
+    game:state.game,
+    enemyAccount:state.enemyAccount,
+    account:state.account
 
   };
 }
@@ -47,6 +61,9 @@ function mapDispatchToProps(dispatch) {
     //show alert dialog
     showSuccessNotify(msg) {
       return dispatch(showSuccessNotify(msg));
+    },
+    changeTurn(){
+        return dispatch(changeTurn())
     }
   };
 }

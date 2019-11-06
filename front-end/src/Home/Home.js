@@ -14,6 +14,9 @@ class Home extends Component {
   //constructor
   constructor(props) {
     super(props);
+    this.state={
+      msg:''
+    }
   }
 
   //render
@@ -32,11 +35,13 @@ class Home extends Component {
     let disableBtnControlMode =
       this.props.game.readyStatus === true ? true : false;
 
-    let disableBtnSendMsg=true;
-    if(this.props.game.inGame&&this.props.game.curMode==='player'){
-      disableBtnSendMsg=false;
+    let disableBtnSendMsg = true;
+    if (this.props.game.inGame && this.props.game.curMode === 'player') {
+      disableBtnSendMsg = false;
     }
 
+    let mode =
+      this.props.game.curMode === 'player' ? 'Chơi với người' : 'Chơi với máy';
     let pageNotLoggin = [];
     pageNotLoggin.push(
       <Row className="home-nonlogin">
@@ -55,6 +60,58 @@ class Home extends Component {
         </Col>
       </Row>
     );
+
+    let listMsgPage = [];
+    let listMsg = this.props.game.listMsg;
+    listMsg.forEach((val, index) => {
+      if (val.type === 1) {
+        //1 la minh
+
+        listMsgPage.push(
+          <div className="line-container">
+            <Row className="pull-right">
+              <Col span={16} style={{ textAlign: 'right' }}>
+                {val.msg}
+              </Col>
+              <Col span={8}>
+                <img
+                  className="mini-img"
+                  src={
+                    config.URL +
+                    '/user/img?token=' +
+                    token +
+                    '&&flag=' +
+                    new Date().getTime()
+                  }
+                />
+              </Col>
+            </Row>
+          </div>
+        );
+      } else {
+        listMsgPage.push(
+          <div className="line-container">
+            <Row className="pull-left">
+              <Col span={8}>
+                <img
+                  className="mini-img"
+                  src={
+                    config.URL +
+                    '/user/imgEnemy?username=' +
+                    this.props.enemyAccount.username +
+                    '&&token=' +
+                    token +
+                    '&&flag=' +
+                    new Date().getTime()
+                  }
+                />
+              </Col>
+              <Col span={16}>{val.msg}</Col>
+            </Row>
+          </div>
+        );
+      }
+    });
 
     let pageLogged = [];
     pageLogged.push(
@@ -75,6 +132,9 @@ class Home extends Component {
           <Col span={6}>
             <Row>
               <Avatar />
+            </Row>
+            <Row style={{ fontSize: '1rem', fontWeight: 'bold' }}>
+              Chế độ chơi hiện tại: {mode}
             </Row>
             <Row className="row-btn-control">
               {!this.props.game.inGame && (
@@ -137,49 +197,16 @@ class Home extends Component {
               }}
             >
               <Row className="msg-log">
-                <div className="line-container">
-                  <Row className="pull-left">
-                    <Col span={8}>
-                      <img
-                        className="mini-img"
-                        src={
-                          config.URL +
-                          '/user/imgEnemy?username=' +
-                          this.props.enemyAccount.username +
-                          '&&token=' +
-                          token +
-                          '&&flag=' +
-                          new Date().getTime()
-                        }
-                      />
-                    </Col>
-                    <Col span={16}>sdasdasd dasdasd asdasd asdasdase asdas</Col>
-                  </Row>
-                </div>
-
-                <div className="line-container">
-                  <Row className="pull-right">
-                    <Col span={16} style={{ textAlign: 'right' }}>
-                      sdasdasd
-                    </Col>
-                    <Col span={8}>
-                      <img
-                        className="mini-img"
-                        src={
-                          config.URL +
-                          '/user/img?token=' +
-                          token +
-                          '&&flag=' +
-                          new Date().getTime()
-                        }
-                      />
-                    </Col>
-                  </Row>
-                </div>
-              </Row>
+                {listMsgPage}
+                </Row>
               <Row className="input-field">
-                <Input className="input" type="text" />
-                <Button type="primary" className="btn-send" disabled={disableBtnSendMsg}>
+                <Input className="input" type="text" id='msg' value={this.state.msg} onChange={this.handleMsgChange.bind(this)}/>
+                <Button
+                  type="primary"
+                  className="btn-send"
+                  disabled={disableBtnSendMsg}
+                  onClick={this.sendMsg.bind(this)}
+                >
                   Gửi
                 </Button>
               </Row>
@@ -195,6 +222,14 @@ class Home extends Component {
         {isLoggin && pageLogged}
       </div>
     );
+  }
+  handleMsgChange(e){
+    this.setState({...this.state,msg:e.target.value})
+  }
+  sendMsg() {
+    
+    this.props.sendMsg(this.state.msg);
+    this.setState({...this.state,msg:''})
   }
 }
 

@@ -27,6 +27,38 @@ class Board extends React.Component {
     this.hitSquare = this.hitSquare.bind(this);
   }
   componentDidMount() {
+   
+   
+    this.props.game.socket.on("hit",(val)=>{
+        let lb=this.state.logic_board;
+        lb[+val.split(',')[0]+1][+val.split(',')[1]+1]=this.props.game.avail_val===1?2:1
+        this.setState({...this.state,logic_board:lb})
+        this.props.changeTurn()
+
+        let result = this.checkWin(+val.split(',')[0], +val.split(',')[1], lb, 1);
+        if (result != false) {
+          this.setState({
+            ...this.state,
+            listWin: result,
+            isWin: true,
+            typeWinner: 1
+          });
+          this.props.showFailNotify('Bạn đã thua cuộc')
+          return;
+        }
+  
+        result = this.checkWin(+val.split(',')[0], +val.split(',')[1], lb, 2);
+        if (result != false) {
+          this.setState({
+            ...this.state,
+            listWin: result,
+            isWin: true,
+            typeWinner: 2
+          });
+          this.props.showFailNotify('Bạn đã thua cuộc')
+          return;
+        }
+    })
     let ctx = this;
     document.onkeydown = function(evt) {
       evt = evt || window.event;
@@ -99,6 +131,13 @@ class Board extends React.Component {
       );
     }
 
+    let myTurn=this.props.game.myTurn
+    let turner='';
+    if(myTurn){
+      turner=this.props.account.username
+    }else{
+      turner=this.props.enemyAccount.username
+    }
     return (
       <Row id="board">
         {/* <div id="btn_replay">Chơi lại</div>
@@ -107,6 +146,12 @@ class Board extends React.Component {
           {this.state.avail_val === 1 ? 'O' : null}
           {this.state.avail_val === 2 ? 'X' : null}
         </div> */}
+        {this.props.game.inGame&&
+        <Row>
+        Lượt đánh của: {turner}
+      </Row>
+        }
+        
         <Col span={8}>
           <Row>{this.props.game.curMode === 'player' && <EnemyAvatar />}</Row>
           <Row className="list-history">
@@ -158,44 +203,50 @@ class Board extends React.Component {
     });
   }
   hitSquare(i, j) {
-    if (
-      this.state.logic_board[i + 1][j + 1] === 0 &&
-      this.state.typeWinner === 0
-    ) {
-      let logic_board = [...this.state.logic_board];
-      logic_board[i + 1][j + 1] = this.state.avail_val;
-
-      let listHit = this.state.listHit;
-      listHit.push(`${i},${j},${this.state.avail_val}`);
-      this.setState({
-        ...this.state,
-        logic_board: logic_board,
-        avail_val: this.state.avail_val === 1 ? 2 : 1,
-        listHit: listHit
-      });
-
-      let result = this.checkWin(i, j, logic_board, 1);
-      if (result != false) {
+    this.props.hitSquare(i, j)
+    if(this.props.game.inGame&&this.props.game.myTurn){
+     
+      if (
+        this.state.logic_board[i + 1][j + 1] === 0 &&
+        this.state.typeWinner === 0
+      ) {
+        let logic_board = [...this.state.logic_board];
+        logic_board[i + 1][j + 1] = this.props.game.avail_val;
+  
+        let listHit = this.state.listHit;
+        listHit.push(`${i},${j},${this.props.game.avail_val}`);
         this.setState({
           ...this.state,
-          listWin: result,
-          isWin: true,
-          typeWinner: 1
+          logic_board: logic_board,
+          listHit: listHit
         });
-        return;
-      }
-
-      result = this.checkWin(i, j, logic_board, 2);
-      if (result != false) {
-        this.setState({
-          ...this.state,
-          listWin: result,
-          isWin: true,
-          typeWinner: 2
-        });
-        return;
+  
+        let result = this.checkWin(i, j, logic_board, 1);
+        if (result != false) {
+          this.setState({
+            ...this.state,
+            listWin: result,
+            isWin: true,
+            typeWinner: 1
+          });
+          this.props.showSuccessNotify('Chúc mừng bạn đã thắng cuộc!')
+          return;
+        }
+  
+        result = this.checkWin(i, j, logic_board, 2);
+        if (result != false) {
+          this.setState({
+            ...this.state,
+            listWin: result,
+            isWin: true,
+            typeWinner: 2
+          });
+          this.props.showSuccessNotify('Chúc mừng bạn đã thắng cuộc!')
+          return;
+        }
       }
     }
+    
   }
 
   checkWin(i, j, logicBoard, typeHitter = 1) {

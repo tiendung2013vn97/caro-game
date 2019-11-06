@@ -18,3 +18,21 @@ export const updateInGameStatus=(status)=>{
         status
     }
 }
+export const updateMsg=(msg)=>{
+    return{
+        type:"UPDATE_MSG",
+        msg
+    }
+}
+
+export const updateTurn=(avail_val,myTurn)=>{
+    return{
+        type:"UPDATE_TURN",
+        avail_val,myTurn
+    }
+}
+export const changeTurn=()=>{
+    return{
+        type:"CHANGE_TURN"
+    }
+}
